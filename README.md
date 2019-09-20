@@ -2,6 +2,7 @@
 
 * Backend: Django
    * Run ```cd backend```
+   * Run ```pip install -r requirements.txt``` to install all requirements to your virtual environment
    * Run ```python manage.py runserver``` to run server at **localhost:8000**
    * I keep my database in the repo for some pre-set data about skills
 * Frontend: Vue.js
