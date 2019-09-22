@@ -16,12 +16,13 @@
                         placeholder="Search for a skill..." 
                         v-model="query" 
                         class="input-with-select" 
-                        clearable>
+                        clearable
+                        @clear="clear">
                         <el-button 
                             slot="append" 
                             icon="el-icon-search" 
                             :loading="pending" 
-                            @click="search()">
+                            @click="search">
                         </el-button>
                     </el-input>
                 </el-row>
@@ -47,7 +48,26 @@
                             </el-checkbox-group>
                         </el-card>
                         <el-card v-else>
-                            <h2>Skills Not Found</h2>
+                            <el-row class="after-description">
+                                <h2>Skills Not Found</h2>
+                            </el-row>
+                            <el-row>
+                                <span>Add your custom skill here</span>
+                            </el-row>
+                            <el-row class="after-description">
+                                <el-input 
+                                    placeholder="Input the skill you want to add..." 
+                                    v-model="beCreated" 
+                                    class="input-with-add" 
+                                    clearable>
+                                    <el-button 
+                                        slot="append" 
+                                        icon="el-icon-plus" 
+                                        :loading="pendingCreate" 
+                                        @click="create">
+                                    </el-button>
+                                </el-input>
+                            </el-row>
                         </el-card>
                     </el-scrollbar>
                 </el-row>
@@ -74,6 +94,7 @@ export default {
         return {
             checkboxGroup: [],
             query: '',
+            beCreated: '',
         };
     },
     computed: {
@@ -84,12 +105,14 @@ export default {
             'userid',
             'userskills',
             'pendingAddSkill',
+            'pendingCreate',
         ])
     },
     methods: {
         search() {
             this.$store.dispatch('getSkillWithQuery', this.query);
             this.checkboxGroup = [];
+            this.beCreated = this.query;
         },
         submit(checkboxGroup) {
             this.$store.dispatch('addSkill', { 
@@ -98,6 +121,14 @@ export default {
             });
             this.checkboxGroup = [];
         },
+        clear() {
+            this.$store.dispatch('getSkill');
+        },
+        create() {
+            this.$store.dispatch('createSkill', this.beCreated);
+            this.query = this.beCreated;
+            this.search();
+        }
     },
     mounted() {
         this.$store.dispatch('getSkill');

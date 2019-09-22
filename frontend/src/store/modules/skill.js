@@ -5,25 +5,30 @@ import $request from '@/lib/request';
 const GET_SKILL = 'GET_SKILL';
 const GET_SKILL_SUCCESS = 'GET_SKILL_SUCCESS';
 const GET_SKILL_FAILURE = 'GET_SKILL_FAILURE';
+const CREATE_SKILL = 'CREATE_SKILL';
+const CREATE_SKILL_SUCCESS = 'CREATE_SKILL_SUCCESS';
+const CREATE_SKILL_FAILURE= 'CREATE_SKILL_FAILURE';
 // endpoints
 const GET_SKILL_ENDPOINT = 'skill/';
+const CREATE_SKILL_ENDPOINT = 'skill/create/';
 
 // initial state
 const state = {
   skills: [],
   pending: false,
+  pendingCreate: false,
 };
 
 // getters
 const getters = {
   skills: state => state.skills,
   pending: state => state.pending,
+  pendingCreate: state => state.pendingCreate,
 };
 
 // actions
 const actions = {
   getSkill({
-    state,
     commit,
   }) {
     commit(GET_SKILL);
@@ -39,7 +44,6 @@ const actions = {
     });
   },
   getSkillWithQuery({
-    state,
     commit,
   }, query) {
     commit(GET_SKILL);
@@ -54,6 +58,22 @@ const actions = {
       });
     });
   },
+  createSkill({
+    commit,
+  }, title) {
+    commit(CREATE_SKILL);
+    return new Promise((resolve) => {
+      $request.post(CREATE_SKILL_ENDPOINT, { title: title }).then((res) => {
+        commit(CREATE_SKILL_SUCCESS);
+        Message.success(`Create the skill ${title} successfully`);
+        resolve();
+      }).catch((error) => {
+        commit(CREATE_SKILL_FAILURE);
+        Message.error('Create skills failed, please retry!');
+        Message.error(`Error: ${error}`);
+      });
+    });
+  }
 };
 
 // mutations
@@ -68,6 +88,15 @@ const mutations = {
   [GET_SKILL_FAILURE](state) {
     state.skills = [];
     state.pending = false;
+  },
+  [CREATE_SKILL](state) {
+    state.pendingCreate = true;
+  },
+  [CREATE_SKILL_SUCCESS](state) {
+    state.pendingCreate = false;
+  },
+  [CREATE_SKILL_FAILURE](state) {
+    state.pendingCreate = false;
   }
 };
 

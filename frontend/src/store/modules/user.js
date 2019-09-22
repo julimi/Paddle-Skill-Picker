@@ -109,7 +109,7 @@ const actions = {
     return new Promise((resolve) => {
       const skills_json = JSON.stringify(payload.skills);
       const endpoint = ADD_SKILL_ENDPOINT.replace('ID', payload.id);
-      console.log(skills_json)
+      // console.log(skills_json)
       $request.put(endpoint, { titles: skills_json }).then((res) => {
         // console.log('look at that: ', res);
         commit(ADD_SKILL_SUCCESS, res);

@@ -197,7 +197,6 @@ export default {
                 callback(new Error('Please input the email address'));
             } else {
                 if (this.form_register.confirm_email !== '') {
-                    console.log("diu")
                     this.$refs.form_register.validateField('confirm_email');
                 }
                 callback();

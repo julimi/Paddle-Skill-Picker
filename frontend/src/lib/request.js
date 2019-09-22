@@ -18,7 +18,7 @@ const refreshTokenInConfig = (config) => {
     }
     config.headers.common.Authorization = `Bearer ${token}`;
   }
-  console.log('token: ', token);
+  // console.log('token: ', token);
   return config;
 };
 
@@ -43,7 +43,7 @@ paddleRequest.interceptors.response.use(
       return paddleRequest(originalRequest);
     }
     if (error.response) {
-      console.log(error.response.data)
+      // console.log(error.response.data)
       Message.error(`Error: ${Object.values(error.response.data)}`)
     }
     return Promise.reject(error.response);
